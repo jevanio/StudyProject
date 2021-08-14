@@ -20,8 +20,8 @@ public class ArrayDuplicatesTest {
     }
 
     @ParameterizedTest
-    @MethodSource("integerArrayProvider")
-    public void givenBasicScenario_whenRemoveDuplicates_returnExpectedK(int[] nums, int[] expectedNums) {
+    @MethodSource("removeDuplicatesProvider")
+    void givenBasicScenario_whenRemoveDuplicates_returnExpectedK(int[] nums, int[] expectedNums) {
         int k = arrayDuplicates.removeDuplicates(nums);
         System.out.println(k);
 
@@ -45,7 +45,7 @@ public class ArrayDuplicatesTest {
 
     @ParameterizedTest
     @MethodSource("removeValueProvider")
-    public void givenBasicScenario_whenRemoveValue_returnExpectedK(int[] nums, int value, int[] expectedNums) {
+    void givenBasicScenario_whenRemoveValue_returnExpectedK(int[] nums, int value, int[] expectedNums) {
         int k = arrayDuplicates.removeValue(nums,value);
         System.out.println(k);
 
@@ -58,7 +58,7 @@ public class ArrayDuplicatesTest {
 
     @ParameterizedTest
     @MethodSource("removeValueProvider")
-    public void givenBasicScenario_whenSimpleRemoveValue_returnExpectedK(int[] nums, int value, int[] expectedNums) {
+    void givenBasicScenario_whenSimpleRemoveValue_returnExpectedK(int[] nums, int value, int[] expectedNums) {
         int k = arrayDuplicates.simpleRemoveElement(nums,value);
         System.out.println(k);
 

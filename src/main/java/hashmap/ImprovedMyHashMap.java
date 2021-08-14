@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ImprovedMyHashMap {
 
-    List<Integer>[] container = null;
+    LinkedList[] container;
     int cap = 1000;
     double loadFactor = 0.75;
     int count = 0;
@@ -21,12 +21,11 @@ public class ImprovedMyHashMap {
             count = 0;
             //rehash
             cap *= 2;
-            List<Integer>[] oldC = container;
+            LinkedList[] oldC = container;
             container = new LinkedList[cap];
-            for(int i=0; i < oldC.length; i++){
-                List<Integer> list = oldC[i];
-                if(list != null){
-                    for(int entry : list)
+            for (List<Integer> list : oldC) {
+                if (list != null) {
+                    for (int entry : list)
                         this.add(entry);
                 }
             }
