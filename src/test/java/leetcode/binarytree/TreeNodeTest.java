@@ -6,14 +6,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,8 +36,27 @@ class TreeNodeTest {
         rootUnbalanced.left.right = new TreeNode(5);
     }
 
+    private static Stream<Arguments> goodNodesProvided() {
+        TreeNode symmetricTree = new TreeNode(3);
+        symmetricTree.left = new TreeNode(1);
+        symmetricTree.right = new TreeNode(4);
+        symmetricTree.left.right = new TreeNode(3);
+        symmetricTree.right.left = new TreeNode(1);
+        symmetricTree.right.right = new TreeNode(5);
+
+        TreeNode noSymmetricTree = new TreeNode(3);
+        noSymmetricTree.left = new TreeNode(3);
+        noSymmetricTree.left.left = new TreeNode(4);
+        noSymmetricTree.left.right = new TreeNode(2);
+
+        return Stream.of(
+                Arguments.of(symmetricTree, 4),
+                Arguments.of(noSymmetricTree, 3)
+        );
+    }
+
     @Test
-    public void givenTree_whenPreorderTraversal_thenReturnPreorderedValues() {
+    void givenTree_whenPreorderTraversal_thenReturnPreorderedValues() {
 
         List<Integer> preorderTraversal = new TreeNodeUtils().preorderTraversal(root);
         assertEquals(10, preorderTraversal.size());
@@ -54,7 +68,7 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenInorderTraversal_thenReturnInOrderedValues() {
+    void givenTree_whenInorderTraversal_thenReturnInOrderedValues() {
 
         List<Integer> inorderTraversal = new TreeNodeUtils().inorderTraversal(root);
         assertEquals(10, inorderTraversal.size());
@@ -66,7 +80,7 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenInorderRecursive_thenReturnInOrderedValues() {
+    void givenTree_whenInorderRecursive_thenReturnInOrderedValues() {
 
         List<Integer> inOrderRecursive = new TreeNodeUtils().inOrderRecursive(root);
         assertEquals(10, inOrderRecursive.size());
@@ -78,7 +92,7 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenPostOrderTraversal_thenReturnPostOrderedValues() {
+    void givenTree_whenPostOrderTraversal_thenReturnPostOrderedValues() {
 
         List<Integer> postOrderTraversal = new TreeNodeUtils().postOrderTraversal(root);
         assertEquals(10, postOrderTraversal.size());
@@ -89,13 +103,6 @@ class TreeNodeTest {
         }
     }
 
-    @ParameterizedTest
-    @MethodSource("heightProvided")
-    public void givenTree_whenHeight_thenReturn4(TreeNode root, int expected) {
-        int height = new TreeNodeUtils().height(root);
-        assertEquals(expected, height);
-    }
-
     private static Stream<Arguments> heightProvided() {
         return Stream.of(
                 Arguments.of(root, 4),
@@ -104,8 +111,15 @@ class TreeNodeTest {
 
     }
 
+    @ParameterizedTest
+    @MethodSource("heightProvided")
+    void givenTree_whenHeight_thenReturn4(TreeNode root, int expected) {
+        int height = new TreeNodeUtils().height(root);
+        assertEquals(expected, height);
+    }
+
     @Test
-    public void givenTree_whenLevelOrderTraversal_thenReturnLevelOrderedValues() {
+    void givenTree_whenLevelOrderTraversal_thenReturnLevelOrderedValues() {
 
         List<List<Integer>> levelOrderTraversal = new TreeNodeUtils().levelOrder(root);
         assertEquals(4, levelOrderTraversal.size());
@@ -120,7 +134,7 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenLevelOrderTraversalV2_thenReturnLevelOrderedValues() {
+    void givenTree_whenLevelOrderTraversalV2_thenReturnLevelOrderedValues() {
 
         List<List<Integer>> levelOrderTraversal = new TreeNodeUtils().levelOrderV2(root);
         assertEquals(4, levelOrderTraversal.size());
@@ -135,7 +149,7 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenPostorderTraversalV2_thenReturnPostorderTree() {
+    void givenTree_whenPostorderTraversalV2_thenReturnPostorderTree() {
 
         List<Integer> postOrderTraversal = new TreeNodeUtils().postorderTraversalV2(root);
         assertEquals(10, postOrderTraversal.size());
@@ -144,13 +158,6 @@ class TreeNodeTest {
         for (Integer postOrderedElement : postOrderTraversal) {
             assertEquals(expected.get(idx++), postOrderedElement);
         }
-    }
-
-    @ParameterizedTest
-    @MethodSource("isSymmetricProvided")
-    public void givenTree_whenIsSymmetric_thenReturnExpected(TreeNode treeNode, boolean expected) {
-        assertEquals(expected,new TreeNodeUtils().isSymmetric(treeNode));
-
     }
 
     @ParameterizedTest
@@ -179,7 +186,6 @@ class TreeNodeTest {
         noSymmetricTree2.right.right = new TreeNode(4);
 
 
-
         return Stream.of(
                 Arguments.of(symmetricTree, true),
                 Arguments.of(noSymmetricTree, false),
@@ -188,7 +194,22 @@ class TreeNodeTest {
     }
 
     @Test
-    public void givenTree_whenHasPathSum_thenReturnExpected() {
+    void givenTree_whenHasPathSum_thenReturnExpected() {
         assertTrue(new TreeNodeUtils().hasPathSum(root, 7));
     }
+
+    @ParameterizedTest
+    @MethodSource("isSymmetricProvided")
+    void givenTree_whenIsSymmetric_thenReturnExpected(TreeNode treeNode, boolean expected) {
+        assertEquals(expected, new TreeNodeUtils().isSymmetric(treeNode));
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("goodNodesProvided")
+    void givenTree_whenGoodNodes_thenReturnExpected(TreeNode root, int expected) {
+        assertEquals(expected, new TreeNodeUtils().goodNodes(root));
+        assertEquals(expected, new TreeNodeUtils().goodNodesV1(root));
+    }
+
 }

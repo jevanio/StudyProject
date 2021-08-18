@@ -112,23 +112,27 @@ public class TreeNodeUtils {
         queue1.add(root);
         for (int i = 0; i < totalHeight; i++) {
             Queue<TreeNode> actualQueue = queueList.get(i);
-            while (!actualQueue.isEmpty()) {
-                TreeNode poll = actualQueue.poll();
-                if (i + 1 != totalHeight) {
-                    Queue<TreeNode> nextQueue = queueList.get(i + 1);
-                    if (poll.left != null) {
-                        nextQueue.add(poll.left);
-                    }
-                    if (poll.right != null) {
-                        nextQueue.add(poll.right);
-                    }
-                }
-                List<Integer> level = levelOrder.get(i);
-                level.add(poll.val);
-            }
+            orderByLevel(totalHeight, queueList, levelOrder, i, actualQueue);
         }
 
         return levelOrder;
+    }
+
+    private void orderByLevel(int totalHeight, List<Queue<TreeNode>> queueList, List<List<Integer>> levelOrder, int i, Queue<TreeNode> actualQueue) {
+        while (!actualQueue.isEmpty()) {
+            TreeNode poll = actualQueue.poll();
+            if (i + 1 != totalHeight) {
+                Queue<TreeNode> nextQueue = queueList.get(i + 1);
+                if (poll.left != null) {
+                    nextQueue.add(poll.left);
+                }
+                if (poll.right != null) {
+                    nextQueue.add(poll.right);
+                }
+            }
+            List<Integer> level = levelOrder.get(i);
+            level.add(poll.val);
+        }
     }
 
     public int height(TreeNode root) {
@@ -231,7 +235,7 @@ public class TreeNodeUtils {
             return false;
         } else {
             for (int i = 0; i < levelList.size() / 2; i++) {
-                if (levelList.get(i) != levelList.get(levelList.size() - i - 1)) {
+                if (!levelList.get(i).equals(levelList.get(levelList.size() - i - 1))) {
                     return false;
                 }
             }
@@ -255,7 +259,7 @@ public class TreeNodeUtils {
     }
 
     public boolean hasPathSum(TreeNode root, int targetSum) {
-        if(root == null) {
+        if (root == null) {
             return false;
         }
         Set<Integer> set = new HashSet<>();
@@ -265,16 +269,66 @@ public class TreeNodeUtils {
     }
 
     private void sumPath(TreeNode root, Set<Integer> set, int sum) {
-        if (root.left==null && root.right == null) {
+        if (root.left == null && root.right == null) {
             set.add(sum + root.val);
         } else {
             sum += root.val;
             if (root.left != null) {
                 sumPath(root.left, set, sum);
             }
-            if (root.right!= null) {
+            if (root.right != null) {
                 sumPath(root.right, set, sum);
             }
         }
+    }
+
+    public int goodNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return goodNodeCounter(root, root.val);
+    }
+
+    public int goodNodesV1(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int countGood = 0;
+
+        int height = height(root);
+        for (int i = 0; i < height; i++) {
+            countGood += goodNodePerLevel(root, i, root.val);
+        }
+        return countGood;
+    }
+
+    private int goodNodeCounter(TreeNode root, int max) {
+        if (root == null) {
+            return 0;
+        }
+        int count = 0;
+        if (root.val >= max) {
+            count = 1;
+        }
+
+        return count
+                + goodNodeCounter(root.left, Math.max(root.val, max))
+                + goodNodeCounter(root.right, Math.max(root.val, max));
+    }
+
+    private int goodNodePerLevel(TreeNode root, int height, int max) {
+        if (root == null) {
+            return 0;
+        }
+        if (height == 0) {
+            if (root.val >= max) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        height--;
+        return goodNodePerLevel(root.right, height, Math.max(root.val, max)) +
+                goodNodePerLevel(root.left, height, Math.max(root.val, max));
     }
 }
