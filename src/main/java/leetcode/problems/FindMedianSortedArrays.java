@@ -42,4 +42,34 @@ public class FindMedianSortedArrays {
             return (mergedNums[mergedNums.length / 2] + mergedNums[(mergedNums.length - 1) / 2]) / 2d;
         }
     }
+
+    public double improvedFindMedianSortedArrays(int[] nums1, int[] nums2) {
+        int med1 = 0;
+        int med2 = 0;
+        int pos1 = 0;
+        int pos2 = 0;
+        int maxLength = nums1.length + nums2.length;
+        if (maxLength == 0) {
+            return 0.0;
+        }
+        for (int i = 0; i <= maxLength / 2; i++) {
+            med1 = med2;
+            if (pos1 == nums1.length) {
+                med2 = nums2[pos2++];
+            } else if (pos2 == nums2.length) {
+                med2 = nums1[pos1++];
+            } else if (nums1[pos1] < nums2[pos2]) {
+                med2 = nums1[pos1++];
+            } else {
+                med2 = nums2[pos2++];
+            }
+        }
+
+        if (maxLength % 2 == 1) {
+            return med2;
+        } else {
+            return (med1 + med2) / 2d;
+        }
+
+    }
 }

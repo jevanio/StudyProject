@@ -30,4 +30,10 @@ class FindMedianSortedArraysTest {
         assertEquals(expectedMedian, findMedianSortedArrays.findMedianSortedArrays(nums1, nums2));
     }
 
+    @ParameterizedTest
+    @MethodSource("arraysProvider")
+    void givenArrays_whenImprovedFindMedianSortedArrays_thenReturnExpected(int[] nums1, int[] nums2, double expectedMedian) {
+        assertEquals(expectedMedian, findMedianSortedArrays.improvedFindMedianSortedArrays(nums1, nums2));
+    }
+
 }
