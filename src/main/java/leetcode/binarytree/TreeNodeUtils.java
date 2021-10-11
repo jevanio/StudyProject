@@ -135,7 +135,7 @@ public class TreeNodeUtils {
         }
     }
 
-    public int height(TreeNode root) {
+    public static int height(TreeNode root) {
         if (root == null) {
             return 0;
         } else {
